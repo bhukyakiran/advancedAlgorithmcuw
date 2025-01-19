@@ -2,8 +2,18 @@
 using namespace std;
 
 
-void printtheMatrix(int matrix[4][5], int rows, int cols) {
-    cout << "Original Matrix:\n";
+void readMatrix(int matrix[][5], int rows, int cols) {
+    cout << "Enter the elements of the matrix (" << rows << "x" << cols << "):\n";
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            cin >> matrix[i][j];
+        }
+    }
+}
+
+
+void printMatrix(int matrix[][5], int rows, int cols) {
+    cout << "\nOriginal Matrix:\n";
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
             cout << matrix[i][j] << " ";
@@ -13,9 +23,10 @@ void printtheMatrix(int matrix[4][5], int rows, int cols) {
 }
 
 
-void convertToSparse(int matrix[4][5], int rows, int cols) {
-    
+void convertToSparse(int matrix[][5], int rows, int cols) {
     int nonZero = 0;
+
+    
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
             if (matrix[i][j] != 0)
@@ -23,10 +34,10 @@ void convertToSparse(int matrix[4][5], int rows, int cols) {
         }
     }
 
-    
+   
     int rowArray[nonZero], colArray[nonZero], valArray[nonZero];
 
-    
+   
     int k = 0;
     for (int i = 0; i < rows; i++) {
         for (int j = 0; j < cols; j++) {
@@ -40,7 +51,7 @@ void convertToSparse(int matrix[4][5], int rows, int cols) {
     }
 
     
-    cout << "\nSparse Matrix Representation:\n";
+    cout << "\n the given Sparse Matrix Representation:\n";
     cout << "Row:    ";
     for (int i = 0; i < nonZero; i++) cout << rowArray[i] << " ";
     cout << "\nColumn: ";
@@ -51,21 +62,17 @@ void convertToSparse(int matrix[4][5], int rows, int cols) {
 }
 
 int main() {
-
-    int Givenmatrix[4][5] = {
-        {0, 0, 3, 0, 4},
-        {0, 0, 5, 7, 0},
-        {0, 0, 0, 0, 0},
-        {0, 2, 6, 0, 0}
-    };
-
     int rows = 4, cols = 5;
+    int matrix[4][5];
 
     
-    printtheMatrix(Givenmatrix, rows, cols);
+    readMatrix(matrix, rows, cols);
+
+   
+    printMatrix(matrix, rows, cols);
 
     
-    convertToSparse(Givenmatrix, rows, cols);
+    convertToSparse(matrix, rows, cols);
 
     return 0;
 }
