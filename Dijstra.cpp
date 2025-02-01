@@ -1,8 +1,12 @@
 #include <iostream>
 #include <vector>
 #include <limits.h>
+
 using namespace std;
+
 #define V 5  
+
+
 int minDistanceof(int dist[], bool sptSet[]) {
     int min = INT_MAX, min_index;
 
@@ -14,30 +18,20 @@ int minDistanceof(int dist[], bool sptSet[]) {
     return min_index;
 }
 
-void printtheSolution(int dist[], int parent[]) {
-    cout << "Vertex\tMinimum of the Cost\tRoute\n";
-    for (int i = 1; i < V; i++) {
-        cout << "A → " << char('A' + i) << "\t" << dist[i] << "\t\t";
 
-        vector<char> path;
-        int j = i;
-        while (j != -1) {
-            path.push_back('A' + j);
-            j = parent[j];
-        }
-
-        for (int k = path.size() - 1; k >= 0; k--) {
-            cout << path[k];
-            if (k != 0) cout << " → ";
-        }
-        cout << endl;
+void printthePath(int parent[], int j) {
+    if (parent[j] == -1) {
+        cout << char('A' + j);
+        return;
     }
+    printthePath(parent, parent[j]);
+    cout << " → " << char('A' + j);
 }
 
 
-void dijkstralgorithm(int graph[V][V], int src) {
+void dijkstralgorthim(int graph[V][V], int src, int dest) {
     int dist[V];      
-    bool sptSet[V];   
+    bool sptSet[V];  
     int parent[V];    
 
     
@@ -47,9 +41,8 @@ void dijkstralgorithm(int graph[V][V], int src) {
         parent[i] = -1;
     }
 
-    dist[src] = 0; 
+    dist[src] = 0;
 
-    
     for (int count = 0; count < V - 1; count++) {
         int u = minDistanceof(dist, sptSet);
         sptSet[u] = true; 
@@ -57,17 +50,19 @@ void dijkstralgorithm(int graph[V][V], int src) {
         for (int v = 0; v < V; v++) {
             if (!sptSet[v] && graph[u][v] && dist[u] != INT_MAX && dist[u] + graph[u][v] < dist[v]) {
                 dist[v] = dist[u] + graph[u][v];
-                parent[v] = u; 
+                parent[v] = u; // Store path
             }
         }
     }
 
     
-    printtheSolution(dist, parent);
+    cout << "Shortest Path from " << char('A' + src) << " to " << char('A' + dest) << ":\n";
+    cout << "Cost: " << dist[dest] << "\nPath: ";
+    printthePath(parent, dest);
+    cout << endl;
 }
 
 int main() {
-    
     int graph[V][V] = {
         {0, 10, 0, 0, 3},  
         {10, 0, 2, 0, 1},  
@@ -76,8 +71,20 @@ int main() {
         {3, 4, 8, 2, 0}    
     };
 
-    int source = 0; 
-    dijkstralgorithm(graph, source);
+    char start, end;
+    cout << "Enter starting node (A-E): ";
+    cin >> start;
+    cout << "Enter ending node (A-E): ";
+    cin >> end;
+
+    int src = start - 'A';
+    int dest = end - 'A';
+
+    if (src >= 0 && src < V && dest >= 0 && dest < V) {
+        dijkstralgorthim(graph, src, dest);
+    } else {
+        cout << "Invalid input! Please enter nodes between A and E.\n";
+    }
 
     return 0;
 }
